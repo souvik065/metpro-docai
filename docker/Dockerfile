@@ -2,16 +2,16 @@
 # Multi-stage build: keeps final image lean and pre-caches AI models
 
 # ── Build stage ───────────────────────────────────────────────────────────────
-FROM python:3.11-slim AS builder
+FROM python:3.11.9-slim-bookworm AS builder
 
 WORKDIR /build
 
-# System deps for PyMuPDF, OpenCV, EasyOCR, and building python wheels
+# System deps for PyMuPDF, OpenCV, EasyOCR, and building python wheels (strictly pinned)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libgomp1 \
-    git \
+    libgl1-mesa-glx=22.3.6-1+deb12u1 \
+    libglib2.0-0=2.74.6-2+deb12u9 \
+    libgomp1=12.2.0-14+deb12u1 \
+    git=1:2.39.5-0+deb12u3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment to isolate dependencies cleanly
@@ -29,7 +29,7 @@ COPY docker/download_models.py .
 RUN python download_models.py
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
-FROM python:3.11-slim AS runtime
+FROM python:3.11.9-slim-bookworm AS runtime
 
 WORKDIR /app
 
@@ -42,11 +42,11 @@ COPY --from=builder /usr/share/model-cache/ /usr/share/model-cache/
 ENV HF_HOME=/usr/share/model-cache/huggingface
 ENV EASYOCR_MODULE_PATH=/usr/share/model-cache/easyocr
 
-# System runtime libs only
+# System runtime libs only (strictly pinned)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libgomp1 \
+    libgl1-mesa-glx=22.3.6-1+deb12u1 \
+    libglib2.0-0=2.74.6-2+deb12u9 \
+    libgomp1=12.2.0-14+deb12u1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy source code

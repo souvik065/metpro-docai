@@ -1,51 +1,48 @@
-# MacPro AI — Python dependencies
-# Install: pip install -r requirements.txt
+# MacPro AI — Python dependencies (strictly pinned for reproducible docker builds)
 
 # ── Web framework ──────────────────────────────────────────────────────────────
-fastapi>=0.111.0
-uvicorn[standard]>=0.29.0
-python-multipart>=0.0.9      # file upload support
+fastapi==0.135.1
+uvicorn[standard]==0.42.0
+python-multipart==0.0.22      # file upload support
 
 # ── Settings ───────────────────────────────────────────────────────────────────
-pydantic>=2.7.0
-pydantic-settings>=2.3.0
+pydantic==2.12.5
+pydantic-settings==2.13.1
 
 # ── Database ───────────────────────────────────────────────────────────────────
-sqlmodel>=0.0.19
-sqlalchemy[asyncio]>=2.0.30
-aiosqlite>=0.20.0            # async SQLite driver (dev)
-asyncpg>=0.29.0              # async PostgreSQL driver (prod, optional)
+sqlmodel==0.0.37
+SQLAlchemy==2.0.48
+aiosqlite==0.22.1            # async SQLite driver (dev)
+asyncpg==0.31.0              # async PostgreSQL driver (prod, optional)
 
 # ── Document parsing ───────────────────────────────────────────────────────────
-PyMuPDF>=1.24.0              # primary PDF parser (fitz)
-pdfplumber>=0.11.0           # table extraction from PDFs
-Pillow>=10.3.0               # image I/O
+PyMuPDF==1.27.2.2            # primary PDF parser (fitz)
+pdfplumber==0.11.9           # table extraction from PDFs
+pillow==12.1.1               # image I/O
 
 # ── OCR ────────────────────────────────────────────────────────────────────────
-easyocr>=1.7.1               # primary OCR engine
-# pytesseract>=0.3.10        # fallback OCR (requires Tesseract system binary)
+easyocr==1.7.2               # primary OCR engine
 
 # ── Medical imaging ────────────────────────────────────────────────────────────
-pydicom>=2.4.4               # DICOM file parsing
+pydicom==3.0.2               # DICOM file parsing
 
 # ── Embeddings ─────────────────────────────────────────────────────────────────
-sentence-transformers>=3.0.0 # text embeddings
-transformers>=4.41.0         # CLIP image/text embeddings
-torch>=2.3.0                 # required by transformers and sentence-transformers
-# torchvision>=0.18.0        # uncomment if using image transforms
+sentence-transformers==5.3.0 # text embeddings
+transformers==5.3.0          # CLIP image/text embeddings
+torch==2.10.0                # required by transformers and sentence-transformers
+torchvision==0.25.0          # required for image transforms
 
 # ── Vector database ────────────────────────────────────────────────────────────
-qdrant-client>=1.9.0         # local or remote Qdrant
+qdrant-client==1.17.1        # local or remote Qdrant
 
-# ── LLM providers (install whichever you use) ──────────────────────────────────
-anthropic>=0.28.0            # Claude
-openai>=1.30.0             # GPT-4
-# httpx>=0.27.0              # for Ollama HTTP calls
+# ── LLM providers ──────────────────────────────────────────────────────────────
+anthropic==0.86.0            # Claude
+openai==2.30.0               # GPT-4
 
 # ── Numerical / Image utilities ────────────────────────────────────────────────
-numpy>=1.26.0
-opencv-python-headless>=4.9.0  # image preprocessing (headless = no GUI)
+numpy==2.2.6
+opencv-python-headless==4.13.0.92  # image preprocessing (headless = no GUI)
 
 # ── Testing ────────────────────────────────────────────────────────────────────
-pytest>=8.2.0
-pytest-asyncio>=0.23.0
+pytest==9.0.2
+pytest-asyncio==1.3.0
