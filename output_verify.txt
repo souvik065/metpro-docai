@@ -1,0 +1,2 @@
+usage: query.py [-h] [--top-k TOP_K] [--no-llm] query
+query.py: error: unrecognized arguments: What is acute watery diarrhea?\ --no-llm 

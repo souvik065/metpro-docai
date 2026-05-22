@@ -1,0 +1,46 @@
+version: "3.9"
+
+# MacPro AI — Docker Compose for local development
+# Usage: docker-compose up --build
+
+services:
+
+  # ── MacPro AI API ────────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: metpro-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data          # persistent data (DB, vector store, assets)
+      - ./data/input:/app/data/input
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///data/macpro.db
+      - QDRANT_PATH=data/qdrant
+      - LOG_LEVEL=INFO
+      - LLM_PROVIDER=anthropic
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    depends_on:
+      - qdrant
+    restart: unless-stopped
+
+  # ── Qdrant Vector DB (optional remote mode) ───────────────────────────────────
+  # Uncomment this block and set QDRANT_HOST=qdrant in .env to use remote Qdrant
+  # (by default MacPro AI uses local file-based Qdrant and this service is optional)
+  qdrant:
+    image: qdrant/qdrant:v1.9.2
+    container_name: macpro-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    restart: unless-stopped
+
+volumes:
+  qdrant_data:
